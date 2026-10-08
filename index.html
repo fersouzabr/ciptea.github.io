@@ -331,8 +331,7 @@
                         id="add">＋ Adicionar carteirinha</button><small class="hint">PDF · até 20 MB</small>
                 </div><canvas id="canvas" hidden aria-label="Página da carteirinha"></canvas>
             </div>
-            <div id="status" role="status" hidden></div><a id="original" hidden target="_blank" rel="noopener">Abrir PDF
-                original</a>
+            <div id="status" role="status" hidden></div><a id="original" hidden target="_blank" rel="noopener"></a>
             <div id="toolbar" hidden>
                 <div><button id="prev" aria-label="Página anterior">‹</button><span id="count"></span><button id="next"
                         aria-label="Próxima página">›</button></div>
@@ -343,9 +342,7 @@
         </section>
         <div id="actions" hidden><button id="change" class="secondary">Trocar PDF</button><button id="open">Abrir
                 original</button></div><input id="file" type="file" accept="application/pdf,.pdf" hidden>
-        <div class="privacy">♡ <strong>Seu documento, no seu navegador.</strong><br>O PDF selecionado não é enviado a um
-            servidor e fica apenas na memória durante o uso. Ao recarregar, selecione-o novamente. O visualizador usa
-            uma biblioteca externa e requer internet no primeiro carregamento.<br><br>Este aplicativo não emite nem
+        <div class="privacy"><br>Esta aplicação não emite nem
             valida a CIPTEA.</div>
         <footer>Feito para simplificar seu dia. <span style="color:#2563eb">♥</span></footer>
     </main>
@@ -360,7 +357,7 @@
         function controls() { for (const id of ['prev', 'next', 'out', 'in', 'fit']) $(id).disabled = busy || !doc; $('prev').disabled = busy || !doc || page <= 1; $('next').disabled = busy || !doc || page >= doc.numPages; $('out').disabled = busy || !doc || zoom <= 1; $('in').disabled = busy || !doc || zoom >= 3; if (doc) $('count').textContent = page + ' / ' + doc.numPages; }
         async function engine() { if (!library) { library = await import(BASE + 'build/pdf.min.mjs'); library.GlobalWorkerOptions.workerSrc = BASE + 'build/pdf.worker.min.mjs'; } return library; }
         async function render() { if (!doc || busy) return; busy = true; controls(); status('Preparando sua carteirinha…'); try { const p = await doc.getPage(page); const base = p.getViewport({ scale: 1 }); const vp = p.getViewport({ scale: Math.max(200, $('area').clientWidth - 32) / base.width * zoom }); const c = $('canvas'), d = Math.min(devicePixelRatio || 1, 2); c.width = Math.floor(vp.width * d); c.height = Math.floor(vp.height * d); c.style.width = vp.width + 'px'; c.style.height = vp.height + 'px'; task = p.render({ canvasContext: c.getContext('2d'), viewport: vp, transform: [d, 0, 0, d, 0, 0] }); await task.promise; status(''); } catch (e) { if (e.name !== 'RenderingCancelledException') status('Não foi possível desenhar esta página. Abra o PDF original.', true); } finally { busy = false; controls(); } }
-        async function load(source, original) { const id = ++loadId; status('Abrindo PDF…'); busy = true; controls(); try { if (task) { task.cancel(); try { await task.promise; } catch { } } if (doc) { await doc.destroy(); doc = null; } const lib = await engine(); const nextDoc = await lib.getDocument(typeof source === 'string' ? { url: source } : { data: source }).promise; if (id !== loadId) { await nextDoc.destroy(); return; } doc = nextDoc; page = 1; zoom = 1; $('empty').hidden = true; $('canvas').hidden = false; $('toolbar').hidden = false; $('badge').textContent = 'PDF selecionado'; busy = false; await render(); } catch (e) { if (id === loadId) { doc = null; busy = false; status('Não foi possível abrir o PDF. Verifique o arquivo, sua conexão ou use o original abaixo.', true); controls(); } } }
+        async function load(source, original) { const id = ++loadId; status('Abrindo PDF…'); busy = true; controls(); try { if (task) { task.cancel(); try { await task.promise; } catch { } } if (doc) { await doc.destroy(); doc = null; } const lib = await engine(); const nextDoc = await lib.getDocument(typeof source === 'string' ? { url: source } : { data: source }).promise; if (id !== loadId) { await nextDoc.destroy(); return; } doc = nextDoc; page = 1; zoom = 1; $('empty').hidden = true; $('canvas').hidden = false; $('toolbar').hidden = false; $('badge').textContent = 'PDF selecionado'; busy = false; await render(); } catch (e) { if (id === loadId) { doc = null; busy = false; status('', true); controls(); } } }
         $('add').onclick = $('change').onclick = () => $('file').click();
         $('file').onchange = async e => { const f = e.target.files[0]; if (!f) return; if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) { status('Selecione um arquivo PDF.', true); return; } if (f.size > 20 * 1024 * 1024) { status('Escolha um PDF de até 20 MB.', true); return; } if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(f); $('original').href = url; $('original').hidden = false; $('actions').hidden = false; await load(new Uint8Array(await f.arrayBuffer()), url); e.target.value = ''; };
         $('open').onclick = () => $('original').click(); $('prev').onclick = () => { if (page > 1 && !busy) { page--; render(); } }; $('next').onclick = () => { if (doc && page < doc.numPages && !busy) { page++; render(); } }; $('out').onclick = () => { zoom = Math.max(1, zoom - .25); render(); }; $('in').onclick = () => { zoom = Math.min(3, zoom + .25); render(); }; $('fit').onclick = () => { zoom = 1; render(); }; let timer; window.addEventListener('resize', () => { clearTimeout(timer); timer = setTimeout(() => { if (doc && !busy) render(); }, 200); });
