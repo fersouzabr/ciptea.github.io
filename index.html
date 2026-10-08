@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#f4f6fa">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Minha CIPTEA">
+    <title>Minha CIPTEA</title>
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6fa;
+            color: #1e293b;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+        }
+
+        main {
+            max-width: 480px;
+            margin: auto;
+            padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+            min-height: 100dvh
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 34px
+        }
+
+        .logo {
+            background: #2563eb;
+            color: white;
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            font-size: 26px
+        }
+
+        header strong {
+            font-size: 18px
+        }
+
+        header small {
+            display: block;
+            color: #64748b;
+            margin-top: 4px
+        }
+
+        .colors {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 22px
+        }
+
+        .colors i {
+            width: 32px;
+            height: 4px;
+            border-radius: 4px;
+            background: #2563eb
+        }
+
+        .colors i:nth-child(2) {
+            background: #ef4444
+        }
+
+        .colors i:nth-child(3) {
+            background: #facc15
+        }
+
+        .colors i:nth-child(4) {
+            background: #16a34a
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            color: #64748b
+        }
+
+        h1 {
+            font-size: 34px;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin: 12px 0
+        }
+
+        h1 span {
+            color: #2563eb
+        }
+
+        .intro {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 26px
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px #0f172a04
+        }
+
+        .cardhead {
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .badge {
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 10px;
+            border-radius: 20px;
+            padding: 6px 9px
+        }
+
+        #area {
+            padding: 16px;
+            overflow: auto;
+            min-height: 340px;
+            max-height: 62dvh;
+            background: #fafbfc
+        }
+
+        #empty {
+            min-height: 308px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center
+        }
+
+        #empty .doc {
+            font-size: 46px;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
+            border-radius: 20px;
+            width: 96px;
+            height: 110px;
+            display: grid;
+            place-items: center;
+            transform: rotate(-7deg);
+            margin-bottom: 24px
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 10px
+        }
+
+        #empty p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+            max-width: 245px;
+            margin: 0 0 22px
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+            border: 0;
+            border-radius: 16px;
+            min-height: 46px;
+            padding: 12px 18px;
+            background: #2563eb;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            touch-action: manipulation
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #eab308;
+            outline-offset: 3px
+        }
+
+        button:disabled {
+            opacity: .35;
+            cursor: default
+        }
+
+        small.hint {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 12px
+        }
+
+        canvas {
+            display: block;
+            margin: auto;
+            background: white;
+            box-shadow: 0 2px 10px #0f172a08
+        }
+
+        #toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px;
+            border-top: 1px solid #f1f5f9
+        }
+
+        #toolbar div {
+            display: flex;
+            align-items: center
+        }
+
+        #toolbar button {
+            background: white;
+            color: #334155;
+            width: 44px;
+            padding: 0;
+            font-size: 22px
+        }
+
+        #count {
+            font-size: 12px;
+            min-width: 40px;
+            text-align: center
+        }
+
+        #actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px
+        }
+
+        #actions button {
+            flex: 1
+        }
+
+        button.secondary {
+            background: white;
+            color: #334155;
+            border: 1px solid #e2e8f0
+        }
+
+        .privacy {
+            background: #eff6ff;
+            border-radius: 18px;
+            padding: 16px;
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.65;
+            margin-top: 24px
+        }
+
+        footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 26px
+        }
+
+        #status {
+            font-size: 13px;
+            color: #64748b;
+            text-align: center;
+            padding: 12px;
+            line-height: 1.5
+        }
+
+        #status.error {
+            color: #b91c1c;
+            background: #fef2f2
+        }
+
+        #original {
+            display: block;
+            text-align: center;
+            font-size: 13px;
+            color: #2563eb;
+            padding: 12px
+        }
+
+        [hidden] {
+            display: none !important
+        }
+
+        @media(max-width:360px) {
+            main {
+                padding-left: 12px;
+                padding-right: 12px
+            }
+
+            h1 {
+                font-size: 30px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="logo" aria-hidden="true">♡</div>
+            <div><strong>Minha CIPTEA</strong><small>Sempre com você</small></div>
+        </header>
+        <div class="colors" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="eyebrow">Sua identificação, mais perto</div>
+        <h1>Sua carteirinha.<br><span>Na palma da mão.</span></h1>
+        <p class="intro">Um espaço simples para visualizar o PDF da sua CIPTEA, sem distrações.</p>
+        <section class="card" aria-label="Visualizador da carteirinha">
+            <div class="cardhead"><span>Minha carteirinha</span><span id="badge" class="badge">Sem documento</span>
+            </div>
+            <div id="area">
+                <div id="empty">
+                    <div class="doc" aria-hidden="true">▤</div>
+                    <h2>Tudo começa com seu PDF</h2>
+                    <p>Adicione sua carteirinha para ter uma visualização limpa e fácil de acessar.</p><button
+                        id="add">＋ Adicionar carteirinha</button><small class="hint">PDF · até 20 MB</small>
+                </div><canvas id="canvas" hidden aria-label="Página da carteirinha"></canvas>
+            </div>
+            <div id="status" role="status" hidden></div><a id="original" hidden target="_blank" rel="noopener">Abrir PDF
+                original</a>
+            <div id="toolbar" hidden>
+                <div><button id="prev" aria-label="Página anterior">‹</button><span id="count"></span><button id="next"
+                        aria-label="Próxima página">›</button></div>
+                <div><button id="out" aria-label="Diminuir zoom">−</button><button id="fit"
+                        aria-label="Ajustar à largura">↔</button><button id="in" aria-label="Aumentar zoom">＋</button>
+                </div>
+            </div>
+        </section>
+        <div id="actions" hidden><button id="change" class="secondary">Trocar PDF</button><button id="open">Abrir
+                original</button></div><input id="file" type="file" accept="application/pdf,.pdf" hidden>
+        <div class="privacy">♡ <strong>Seu documento, no seu navegador.</strong><br>O PDF selecionado não é enviado a um
+            servidor e fica apenas na memória durante o uso. Ao recarregar, selecione-o novamente. O visualizador usa
+            uma biblioteca externa e requer internet no primeiro carregamento.<br><br>Este aplicativo não emite nem
+            valida a CIPTEA.</div>
+        <footer>Feito para simplificar seu dia. <span style="color:#2563eb">♥</span></footer>
+    </main>
+    <script type="module">
+        // Para abrir automaticamente um PDF, use somente uma URL protegida por autenticação.
+        // Não publique documentos pessoais em uma pasta de acesso público.
+        const PDF_URL = './documentos/minha_ciptea.pdf';
+        const BASE = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/';
+        const $ = id => document.getElementById(id);
+        let library, doc, page = 1, zoom = 1, task, url, busy = false, loadId = 0;
+        function status(text, error = false) { $('status').hidden = !text; $('status').textContent = text; $('status').classList.toggle('error', error); }
+        function controls() { for (const id of ['prev', 'next', 'out', 'in', 'fit']) $(id).disabled = busy || !doc; $('prev').disabled = busy || !doc || page <= 1; $('next').disabled = busy || !doc || page >= doc.numPages; $('out').disabled = busy || !doc || zoom <= 1; $('in').disabled = busy || !doc || zoom >= 3; if (doc) $('count').textContent = page + ' / ' + doc.numPages; }
+        async function engine() { if (!library) { library = await import(BASE + 'build/pdf.min.mjs'); library.GlobalWorkerOptions.workerSrc = BASE + 'build/pdf.worker.min.mjs'; } return library; }
+        async function render() { if (!doc || busy) return; busy = true; controls(); status('Preparando sua carteirinha…'); try { const p = await doc.getPage(page); const base = p.getViewport({ scale: 1 }); const vp = p.getViewport({ scale: Math.max(200, $('area').clientWidth - 32) / base.width * zoom }); const c = $('canvas'), d = Math.min(devicePixelRatio || 1, 2); c.width = Math.floor(vp.width * d); c.height = Math.floor(vp.height * d); c.style.width = vp.width + 'px'; c.style.height = vp.height + 'px'; task = p.render({ canvasContext: c.getContext('2d'), viewport: vp, transform: [d, 0, 0, d, 0, 0] }); await task.promise; status(''); } catch (e) { if (e.name !== 'RenderingCancelledException') status('Não foi possível desenhar esta página. Abra o PDF original.', true); } finally { busy = false; controls(); } }
+        async function load(source, original) { const id = ++loadId; status('Abrindo PDF…'); busy = true; controls(); try { if (task) { task.cancel(); try { await task.promise; } catch { } } if (doc) { await doc.destroy(); doc = null; } const lib = await engine(); const nextDoc = await lib.getDocument(typeof source === 'string' ? { url: source } : { data: source }).promise; if (id !== loadId) { await nextDoc.destroy(); return; } doc = nextDoc; page = 1; zoom = 1; $('empty').hidden = true; $('canvas').hidden = false; $('toolbar').hidden = false; $('badge').textContent = 'PDF selecionado'; busy = false; await render(); } catch (e) { if (id === loadId) { doc = null; busy = false; status('Não foi possível abrir o PDF. Verifique o arquivo, sua conexão ou use o original abaixo.', true); controls(); } } }
+        $('add').onclick = $('change').onclick = () => $('file').click();
+        $('file').onchange = async e => { const f = e.target.files[0]; if (!f) return; if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) { status('Selecione um arquivo PDF.', true); return; } if (f.size > 20 * 1024 * 1024) { status('Escolha um PDF de até 20 MB.', true); return; } if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(f); $('original').href = url; $('original').hidden = false; $('actions').hidden = false; await load(new Uint8Array(await f.arrayBuffer()), url); e.target.value = ''; };
+        $('open').onclick = () => $('original').click(); $('prev').onclick = () => { if (page > 1 && !busy) { page--; render(); } }; $('next').onclick = () => { if (doc && page < doc.numPages && !busy) { page++; render(); } }; $('out').onclick = () => { zoom = Math.max(1, zoom - .25); render(); }; $('in').onclick = () => { zoom = Math.min(3, zoom + .25); render(); }; $('fit').onclick = () => { zoom = 1; render(); }; let timer; window.addEventListener('resize', () => { clearTimeout(timer); timer = setTimeout(() => { if (doc && !busy) render(); }, 200); });
+        if (PDF_URL) { $('original').href = PDF_URL; $('original').hidden = false; $('actions').hidden = false; load(PDF_URL, PDF_URL); }
+    </script>
+</body>
+
+</html>
