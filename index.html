@@ -331,7 +331,7 @@
                         id="add">＋ Adicionar carteirinha</button><small class="hint">PDF · até 20 MB</small>
                 </div><canvas id="canvas" hidden aria-label="Página da carteirinha"></canvas>
             </div>
-       
+            <div id="status" role="status" hidden></div>
             <div id="toolbar" hidden>
                 <div><button id="prev" aria-label="Página anterior">‹</button><span id="count"></span><button id="next"
                         aria-label="Próxima página">›</button></div>
@@ -342,6 +342,7 @@
         </section>
         <div id="actions" hidden><button id="change" class="secondary">Trocar PDF</button><button id="open">Abrir
                 original</button></div><input id="file" type="file" accept="application/pdf,.pdf" hidden>
+        
         <footer>Feito para simplificar seu dia. <span style="color:#2563eb">♥</span></footer>
     </main>
     <script type="module">
